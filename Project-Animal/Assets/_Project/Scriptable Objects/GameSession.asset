@@ -1,0 +1,165 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a559374d67ce85d46b189595cb29728c, type: 3}
+  m_Name: GameSession
+  m_EditorClassIdentifier: 
+  playfabSession:
+    EntityToken:
+      Entity:
+        Id: C48CA171AEF3C9EE
+        Type: title_player_account
+      EntityToken: M3x7ImkiOiIyMDIwLTA4LTIxVDIxOjE4OjIwLjYyOTY3MTNaIiwiaWRwIjoiQ3VzdG9tIiwiZSI6IjIwMjAtMDgtMjJUMjE6MTg6MjAuNjI5NjcxM1oiLCJoIjoiRjIyQUREQ0VDRTM2OTg5MSIsInMiOiJ0dEtVaWN3Q0ZEWTVwVE9sOFBISitOVFJodTRCNnJDMHRVZm9WWHB4Q1AwPSIsImVjIjoidGl0bGVfcGxheWVyX2FjY291bnQhQkJFMDUxQTAxOUEzNTAzNC8xMEZCMC9FN0ZFMEJDRkMzQkMzRURFL0M0OENBMTcxQUVGM0M5RUUvIiwiZWkiOiJDNDhDQTE3MUFFRjNDOUVFIiwiZXQiOiJ0aXRsZV9wbGF5ZXJfYWNjb3VudCJ9
+    InfoResultPayload:
+      AccountInfo:
+        AndroidDeviceInfo:
+          AndroidDeviceId: 
+        AppleAccountInfo:
+          AppleSubjectId: 
+        CustomIdInfo:
+          CustomId: 
+        FacebookInfo:
+          FacebookId: 
+          FullName: 
+        FacebookInstantGamesIdInfo:
+          FacebookInstantGamesId: 
+        GameCenterInfo:
+          GameCenterId: 
+        GoogleInfo:
+          GoogleEmail: 
+          GoogleGender: 
+          GoogleId: 
+          GoogleLocale: 
+          GoogleName: 
+        IosDeviceInfo:
+          IosDeviceId: 
+        KongregateInfo:
+          KongregateId: 
+          KongregateName: 
+        NintendoSwitchAccountInfo:
+          NintendoSwitchAccountSubjectId: 
+        NintendoSwitchDeviceIdInfo:
+          NintendoSwitchDeviceId: 
+        OpenIdInfo: []
+        PlayFabId: 
+        PrivateInfo:
+          Email: 
+        PsnInfo:
+          PsnAccountId: 
+          PsnOnlineId: 
+        SteamInfo:
+          SteamCountry: 
+          SteamId: 
+          SteamName: 
+        TitleInfo:
+          AvatarUrl: 
+          DisplayName: 
+          TitlePlayerAccount:
+            Id: 
+            Type: 
+        TwitchInfo:
+          TwitchId: 
+          TwitchUserName: 
+        Username: 
+        WindowsHelloInfo:
+          WindowsHelloDeviceName: 
+          WindowsHelloPublicKeyHash: 
+        XboxInfo:
+          XboxUserId: 
+      CharacterInventories: []
+      CharacterList: []
+      PlayerProfile:
+        AdCampaignAttributions: []
+        AvatarUrl: 
+        ContactEmailAddresses: []
+        DisplayName: 
+        ExperimentVariants: []
+        LinkedAccounts: []
+        Locations: []
+        Memberships: []
+        PlayerId: 
+        PublisherId: 
+        PushNotificationRegistrations: []
+        Statistics: []
+        Tags: []
+        TitleId: 
+        ValuesToDate: []
+      PlayerStatistics: []
+      UserDataVersion: 0
+      UserInventory: []
+      UserReadOnlyDataVersion: 0
+    NewlyCreated: 0
+    PlayFabId: E7FE0BCFC3BC3EDE
+    SessionTicket: E7FE0BCFC3BC3EDE--FD13E0D55184C2BE-10FB0-8D84617BADF0A89-9GsuoR1RqKFuKXIoRDs5jUO9aAIfzXMPjpxNNXs1y+c=
+    SettingsForUser:
+      GatherDeviceInfo: 1
+      GatherFocusInfo: 1
+      NeedsAttribution: 0
+    TreatmentAssignment:
+      Variables: []
+      Variants: []
+  playfabAccountInfo:
+    AccountInfo:
+      AndroidDeviceInfo:
+        AndroidDeviceId: 
+      AppleAccountInfo:
+        AppleSubjectId: 
+      CustomIdInfo:
+        CustomId: Brilath
+      FacebookInfo:
+        FacebookId: 
+        FullName: 
+      FacebookInstantGamesIdInfo:
+        FacebookInstantGamesId: 
+      GameCenterInfo:
+        GameCenterId: 
+      GoogleInfo:
+        GoogleEmail: 
+        GoogleGender: 
+        GoogleId: 
+        GoogleLocale: 
+        GoogleName: 
+      IosDeviceInfo:
+        IosDeviceId: 
+      KongregateInfo:
+        KongregateId: 
+        KongregateName: 
+      NintendoSwitchAccountInfo:
+        NintendoSwitchAccountSubjectId: 
+      NintendoSwitchDeviceIdInfo:
+        NintendoSwitchDeviceId: 
+      OpenIdInfo: []
+      PlayFabId: E7FE0BCFC3BC3EDE
+      PrivateInfo:
+        Email: 
+      PsnInfo:
+        PsnAccountId: 
+        PsnOnlineId: 
+      SteamInfo:
+        SteamCountry: 
+        SteamId: 
+        SteamName: 
+      TitleInfo:
+        AvatarUrl: 
+        DisplayName: Brilath
+        TitlePlayerAccount:
+          Id: C48CA171AEF3C9EE
+          Type: title_player_account
+      TwitchInfo:
+        TwitchId: 
+        TwitchUserName: 
+      Username: 
+      WindowsHelloInfo:
+        WindowsHelloDeviceName: 
+        WindowsHelloPublicKeyHash: 
+      XboxInfo:
+        XboxUserId: 
+  desiredPhotonRoom: 

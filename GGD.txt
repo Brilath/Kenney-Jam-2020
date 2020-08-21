@@ -1,0 +1,31 @@
+GDD: Cursed Animals
+
+Story:
+Ancient curse has been released infecting animals, transfered through touch. The only way to cure
+this curse is to transfer it to another animal. The quick and evasive will survive.
+
+Game Loop:
+Cursed NPC chases players if tags them they become cursed
+Cursed players can become uncursed if they tag another players
+Players can drop a stun bomb to have more time to escape
+Last player not cursed wins
+
+Game Type:
+2D Size View
+Animal Models
+
+Multiplayer:
+Playfab
+Photon
+
+Features
+	* CustomId Login (Done)
+	* Add Friends
+	* Show Friends (Done)
+	* Join Friends (Done)
+	* Unlock Animal Skins
+	* Join random game queue
+	* Join room (OnRoomListUpdate)
+	* Recently played with
+	* Player Selection
+	* Start Game
