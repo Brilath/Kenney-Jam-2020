@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using PlayFab.ClientModels;
 
 namespace BrilathTTV
@@ -9,13 +7,65 @@ namespace BrilathTTV
     public class GameSession : ScriptableObject
     {
         [SerializeField]
-        private LoginResult playfabSession;
-        public LoginResult PlayfabSession { get { return playfabSession; } set { playfabSession = value; } }
+        private string playfabToken;
+        public string PlayfabToken
+        {
+            get
+            {
+                playfabToken = PlayerPrefs.GetString("PLAYFABTOKEN");
+                return username;
+            }
+            set
+            {
+                playfabToken = value;
+                PlayerPrefs.SetString("PLAYFABTOKEN", value);
+            }
+        }
         [SerializeField]
-        private GetAccountInfoResult playfabAccountInfo;
-        public GetAccountInfoResult PlayfabAccountInfo { get { return playfabAccountInfo; } set { playfabAccountInfo = value; } }
+        private string username;
+        public string Username
+        {
+            get
+            {
+                username = PlayerPrefs.GetString("USERNAME");
+                return username;
+            }
+            set
+            {
+                username = value;
+                PlayerPrefs.SetString("USERNAME", value);
+            }
+        }
         [SerializeField]
         private string desiredPhotonRoom;
-        public string DesiredPhotonRoom { get { return desiredPhotonRoom; } set { desiredPhotonRoom = value; } }
+        public string DesiredPhotonRoom
+        {
+            get
+            {
+                desiredPhotonRoom = PlayerPrefs.GetString("DESIREDPHOTONROOM");
+                return desiredPhotonRoom;
+            }
+            set
+            {
+                desiredPhotonRoom = value;
+                PlayerPrefs.SetString("DESIREDPHOTONROOM", value);
+            }
+        }
+        [SerializeField]
+        private int selectedCharacter;
+        public int SelectedCharacter
+        {
+            get
+            {
+                selectedCharacter = PlayerPrefs.GetInt("SELECTEDCHARACTER");
+                return selectedCharacter;
+            }
+            set
+            {
+                selectedCharacter = value;
+                PlayerPrefs.SetInt("DESIREDPHOTONROOM", value);
+            }
+        }
     }
+
 }

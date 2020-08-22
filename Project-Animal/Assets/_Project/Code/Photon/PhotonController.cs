@@ -14,6 +14,10 @@ namespace BrilathTTV
         [SerializeField] private GameSession gameSession;
         [SerializeField] private List<PlayfabFriendInfo> playfabFriends;
         public static Action<List<PhotonFriendInfo>> OnDisplayFriends = delegate { };
+        public static Action<Player> OnDisplayRoomPlayer = delegate { };
+        public static Action<Player> OnRemovePlayerInRoom = delegate { };
+        public static Action OnRemovePlayersInRoom = delegate { };
+
         #region Unity Methods
         private void Awake()
         {
@@ -23,7 +27,7 @@ namespace BrilathTTV
 
         void Start()
         {
-            string nickName = gameSession.PlayfabAccountInfo.AccountInfo.TitleInfo.DisplayName;
+            string nickName = gameSession.Username;
             ConnectToPhoton(nickName);
         }
         private void OnDestroy()
@@ -38,17 +42,24 @@ namespace BrilathTTV
         {
             Debug.Log($"Connect to Photon as {nickName}");
             PhotonNetwork.AuthValues = new AuthenticationValues(nickName);
+            PhotonNetwork.SendRate = 20;
+            PhotonNetwork.SerializationRate = 5;
             PhotonNetwork.AutomaticallySyncScene = true;
+            PhotonNetwork.NickName = nickName;
+            PhotonNetwork.GameVersion = "1";
             PhotonNetwork.ConnectUsingSettings();
         }
         private void CreatePhotonRoom(string roomName)
         {
             RoomOptions ro = new RoomOptions();
             ro.MaxPlayers = 4;
+            ro.IsOpen = true;
+            ro.IsVisible = true;
             PhotonNetwork.JoinOrCreateRoom(roomName, ro, TypedLobby.Default);
         }
         private void JoinPhotonRoom(string roomName)
         {
+            Debug.Log($"Join Photon room: {roomName}");
             gameSession.DesiredPhotonRoom = "";
             PhotonNetwork.JoinRoom(roomName);
         }
@@ -76,10 +87,12 @@ namespace BrilathTTV
         public override void OnJoinedLobby()
         {
             Debug.Log($"Connected to Photon Lobby: {PhotonNetwork.CurrentLobby}");
-            if (playfabFriends.Count == 0) return;
+            if (playfabFriends.Count != 0)
+            {
+                string[] friendDisplayNames = playfabFriends.Select(f => f.TitleDisplayName).ToArray();
+                PhotonNetwork.FindFriends(friendDisplayNames);
+            }
 
-            string[] friendDisplayNames = playfabFriends.Select(f => f.TitleDisplayName).ToArray();
-            PhotonNetwork.FindFriends(friendDisplayNames);
             if (string.IsNullOrEmpty(gameSession.DesiredPhotonRoom))
             {
                 CreatePhotonRoom(PhotonNetwork.LocalPlayer.UserId);
@@ -106,16 +119,28 @@ namespace BrilathTTV
             foreach (KeyValuePair<int, Player> player in PhotonNetwork.CurrentRoom.Players)
             {
                 Debug.Log($"{player.Value.UserId} in the Photon Room {PhotonNetwork.CurrentRoom.Name} with you!");
+                OnDisplayRoomPlayer?.Invoke(player.Value);
             }
+        }
+        public override void OnPlayerEnteredRoom(Player newPlayer)
+        {
+            Debug.Log($"{newPlayer.UserId} has entered the room");
+            OnDisplayRoomPlayer?.Invoke(newPlayer);
         }
         public override void OnJoinRoomFailed(short returnCode, string message)
         {
-            Debug.Log($"Error joining Photon Room: {message}");
+            Debug.Log($"Error joining Photon Room: {returnCode} {message}");
             CreatePhotonRoom(PhotonNetwork.LocalPlayer.UserId);
         }
         public override void OnLeftRoom()
         {
             Debug.Log("Left Photon room");
+            OnRemovePlayersInRoom?.Invoke();
+        }
+        public override void OnPlayerLeftRoom(Player otherPlayer)
+        {
+            Debug.Log($"{otherPlayer.UserId} has left Photon room {PhotonNetwork.CurrentRoom.Name}");
+            OnRemovePlayerInRoom?.Invoke(otherPlayer);
         }
         #endregion
     }

@@ -18,7 +18,7 @@ namespace BrilathTTV
 
         private void GetPlayfabFriends()
         {
-            Debug.Log($"Get Playfab Friends for {gameSession.PlayfabAccountInfo.AccountInfo.TitleInfo.DisplayName}");
+            Debug.Log($"Get Playfab Friends for {gameSession.Username}");
             var request = new GetFriendsListRequest { IncludeSteamFriends = false, IncludeFacebookFriends = false, XboxToken = null };
             PlayFabClientAPI.GetFriendsList(request, OnFriendsListSuccess, OnFailure);
         }

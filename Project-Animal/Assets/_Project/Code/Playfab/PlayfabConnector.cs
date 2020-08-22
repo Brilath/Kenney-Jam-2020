@@ -20,16 +20,18 @@ namespace BrilathTTV
         // Start is called before the first frame update
         void Start()
         {
-            PlayerPrefs.DeleteAll();
+            PlayerPrefs.DeleteKey("PLAYFABTOKEN");
+            PlayerPrefs.DeleteKey("DESIREDPHOTONROOM");
+
             if (string.IsNullOrEmpty(PlayFabSettings.TitleId))
             {
                 PlayFabSettings.TitleId = "10FB0";
             }
 
-            if (PlayerPrefs.HasKey("USERNAME"))
+            if (!string.IsNullOrEmpty(gameSession.Username))
             {
                 isRegistering = false;
-                username = PlayerPrefs.GetString("USERNAME");
+                username = gameSession.Username;
                 Connect(username);
             }
         }
@@ -74,13 +76,13 @@ namespace BrilathTTV
         private void OnLoginSuccess(LoginResult result)
         {
             Debug.Log($"Playfab login success");
-            gameSession.PlayfabSession = result;
+            gameSession.PlayfabToken = result.AuthenticationContext.ClientSessionTicket;
 
             GetPlayfabAccountInfo(result.PlayFabId);
         }
         private void OnAccountInfoSuccess(GetAccountInfoResult result)
         {
-            gameSession.PlayfabAccountInfo = result;
+            gameSession.Username = result.AccountInfo.TitleInfo.DisplayName;
             if (isRegistering)
             {
                 UpdateTitleDisplayName(username);
