@@ -17,24 +17,31 @@ namespace BrilathTTV
         public static Action<Player> OnDisplayRoomPlayer = delegate { };
         public static Action<Player> OnRemovePlayerInRoom = delegate { };
         public static Action OnRemovePlayersInRoom = delegate { };
+        public static Action<Player> OnMasterClient = delegate { };
 
         #region Unity Methods
         private void Awake()
         {
+            playfabFriends = new List<PlayfabFriendInfo>();
             PlayfabController.OnFriendsFound += HandleFriendsFound;
             UIFriend.OnSwitchPhotonRoom += HandleSwitchPhotonRoom;
+            UIAddFriend.OnNewFriend += HandleNewFriend;
+            UIController.OnLoadNetworkScene += HandleLoadNetworkScene;
         }
 
+        private void OnDestroy()
+        {
+            PlayfabController.OnFriendsFound -= HandleFriendsFound;
+            UIFriend.OnSwitchPhotonRoom -= HandleSwitchPhotonRoom;
+            UIAddFriend.OnNewFriend -= HandleNewFriend;
+            UIController.OnLoadNetworkScene -= HandleLoadNetworkScene;
+        }
         void Start()
         {
             string nickName = gameSession.Username;
             ConnectToPhoton(nickName);
         }
-        private void OnDestroy()
-        {
-            PlayfabController.OnFriendsFound -= HandleFriendsFound;
-            UIFriend.OnSwitchPhotonRoom -= HandleSwitchPhotonRoom;
-        }
+
         #endregion
 
         #region Private Methods
@@ -67,11 +74,24 @@ namespace BrilathTTV
         {
             Debug.Log($"Search for Photon Friends: {friends.Count}");
             playfabFriends = friends;
+            if (PhotonNetwork.InRoom)
+            {
+                PhotonNetwork.LeaveRoom();
+            }
         }
         private void HandleSwitchPhotonRoom(string roomName)
         {
             gameSession.DesiredPhotonRoom = roomName;
             PhotonNetwork.LeaveRoom();
+        }
+        private void HandleNewFriend()
+        {
+            Debug.Log("Photon handle new friend");
+            gameSession.DesiredPhotonRoom = PhotonNetwork.CurrentRoom.Name;
+        }
+        private void HandleLoadNetworkScene(string sceneName)
+        {
+            PhotonNetwork.LoadLevel(sceneName);
         }
         #endregion
 
@@ -87,11 +107,7 @@ namespace BrilathTTV
         public override void OnJoinedLobby()
         {
             Debug.Log($"Connected to Photon Lobby: {PhotonNetwork.CurrentLobby}");
-            if (playfabFriends.Count != 0)
-            {
-                string[] friendDisplayNames = playfabFriends.Select(f => f.TitleDisplayName).ToArray();
-                PhotonNetwork.FindFriends(friendDisplayNames);
-            }
+            FindPhotonFriends();
 
             if (string.IsNullOrEmpty(gameSession.DesiredPhotonRoom))
             {
@@ -99,9 +115,19 @@ namespace BrilathTTV
             }
             else
             {
+                Debug.Log($"Joining desired Photon room {gameSession.DesiredPhotonRoom}");
                 JoinPhotonRoom(gameSession.DesiredPhotonRoom);
             }
+        }
 
+        private void FindPhotonFriends()
+        {
+            Debug.Log("Finding Photon Friends");
+            if (playfabFriends.Count != 0)
+            {
+                string[] friendDisplayNames = playfabFriends.Select(f => f.TitleDisplayName).ToArray();
+                PhotonNetwork.FindFriends(friendDisplayNames);
+            }
         }
 
         public override void OnFriendListUpdate(List<PhotonFriendInfo> friendList)
@@ -116,6 +142,10 @@ namespace BrilathTTV
         public override void OnJoinedRoom()
         {
             Debug.Log($"Joined Photon Room: {PhotonNetwork.CurrentRoom.Name}");
+            if (PhotonNetwork.LocalPlayer.IsMasterClient)
+            {
+                OnMasterClient?.Invoke(PhotonNetwork.LocalPlayer);
+            }
             foreach (KeyValuePair<int, Player> player in PhotonNetwork.CurrentRoom.Players)
             {
                 Debug.Log($"{player.Value.UserId} in the Photon Room {PhotonNetwork.CurrentRoom.Name} with you!");
@@ -141,6 +171,11 @@ namespace BrilathTTV
         {
             Debug.Log($"{otherPlayer.UserId} has left Photon room {PhotonNetwork.CurrentRoom.Name}");
             OnRemovePlayerInRoom?.Invoke(otherPlayer);
+        }
+        public override void OnMasterClientSwitched(Player newMasterClient)
+        {
+            Debug.Log($"Switching Master Client to {newMasterClient.NickName}");
+            OnMasterClient?.Invoke(newMasterClient);
         }
         #endregion
     }

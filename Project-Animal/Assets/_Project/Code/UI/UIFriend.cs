@@ -18,9 +18,6 @@ namespace BrilathTTV
         public void OnJoinFriend()
         {
             OnSwitchPhotonRoom?.Invoke(friend.UserId);
-            // Leave room
-            // rejoin lobby
-            // join new room
         }
     }
 }

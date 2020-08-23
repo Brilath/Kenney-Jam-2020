@@ -20,12 +20,12 @@ Photon
 
 Features
 	* CustomId Login (Done)
-	* Add Friends(Day 2 Evening)
+	* Add Friends(Done)
 	* Show Friends (Done)
 	* Join Friends (Done)
 	* Unlock Animal Skins (Dreaming)
 	* Join random game queue (Day 2 Evening)
 	* Join room (OnRoomListUpdate) (Day 2 Evening)
 	* Recently played with (Day 3)
-	* Player Selection (Testing)
+	* Player Selection (Done)
 	* Start Game (Day 2 Evening)

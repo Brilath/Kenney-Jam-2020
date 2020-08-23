@@ -11,9 +11,26 @@ namespace BrilathTTV
         [SerializeField] private GameSession gameSession;
         public static Action<List<FriendInfo>> OnFriendsFound = delegate { };
 
+        private void Awake()
+        {
+            UIAddFriend.OnAddFriend += HandleAddPlayfabFriend;
+        }
+
+        private void OnDestroy()
+        {
+            UIAddFriend.OnAddFriend -= HandleAddPlayfabFriend;
+        }
+
         void Start()
         {
             GetPlayfabFriends();
+        }
+
+        private void HandleAddPlayfabFriend(string displayName)
+        {
+            Debug.Log($"Add Playfab friend {displayName}");
+            var request = new AddFriendRequest { FriendTitleDisplayName = displayName };
+            PlayFabClientAPI.AddFriend(request, OnFriendAddedSuccess, OnFailure);
         }
 
         private void GetPlayfabFriends()
@@ -31,6 +48,12 @@ namespace BrilathTTV
                 Debug.Log($"Friend Found: {friend.TitleDisplayName}");
             }
             OnFriendsFound?.Invoke(result.Friends);
+        }
+
+        private void OnFriendAddedSuccess(AddFriendResult result)
+        {
+            Debug.Log("You have added friend");
+            GetPlayfabFriends();
         }
 
         private void OnFailure(PlayFabError error)

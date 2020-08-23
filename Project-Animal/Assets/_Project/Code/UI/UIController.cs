@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using Photon;
 using Photon.Pun;
@@ -15,10 +14,17 @@ namespace BrilathTTV
         [Header("Friend UI")]
         [SerializeField] private UIFriend uiFriendPrefab;
         [SerializeField] private Transform friendContainer;
+        [SerializeField] private GameObject friendPanel;
+        [SerializeField] private GameObject recentPlayersPanel;
         [Header("Room UI")]
         [SerializeField] private UIPlayerSelection uiPlayerSelectionPrefab;
         [SerializeField] private Transform playerSelectionContainer;
         [SerializeField] private Dictionary<Player, UIPlayerSelection> roomPlayerSelection;
+        [SerializeField] private Button playButton;
+        [Header("Game UI")]
+        [SerializeField] private string gameSceneName;
+
+        public static Action<string> OnLoadNetworkScene = delegate { };
 
         private void Awake()
         {
@@ -27,6 +33,7 @@ namespace BrilathTTV
             PhotonController.OnDisplayRoomPlayer += HandleDisplayRoomPlayer;
             PhotonController.OnRemovePlayerInRoom += HandleRemovePlayerInRoom;
             PhotonController.OnRemovePlayersInRoom += HandleRemovePlayersInRoom;
+            PhotonController.OnMasterClient += HandleMasterClientSwitch;
         }
 
         private void OnDestroy()
@@ -35,7 +42,20 @@ namespace BrilathTTV
             PhotonController.OnDisplayRoomPlayer -= HandleDisplayRoomPlayer;
             PhotonController.OnRemovePlayerInRoom -= HandleRemovePlayerInRoom;
             PhotonController.OnRemovePlayersInRoom -= HandleRemovePlayersInRoom;
+            PhotonController.OnMasterClient -= HandleMasterClientSwitch;
         }
+
+        public void ToggleFriendUIPanels()
+        {
+            friendPanel.SetActive(!friendPanel.activeSelf);
+            recentPlayersPanel.SetActive(!recentPlayersPanel.activeSelf);
+        }
+
+        public void StartGame()
+        {
+            OnLoadNetworkScene?.Invoke(gameSceneName);
+        }
+
         private void HandleDisplayFriends(List<FriendInfo> friends)
         {
             for (int i = 0; i < friendContainer.childCount; i++)
@@ -62,11 +82,6 @@ namespace BrilathTTV
                 uiPlayerSelection.Initialize(player, playerSelectionContainer.name);
                 roomPlayerSelection.Add(player, uiPlayerSelection);
             }
-
-            // foreach (UIPlayerSelection playerSelection in FindObjectsOfType<UIPlayerSelection>())
-            // {
-            //     playerSelection.transform.SetParent(playerSelectionContainer);
-            // }
         }
         private void HandleRemovePlayersInRoom()
         {
@@ -74,6 +89,7 @@ namespace BrilathTTV
             {
                 Destroy(playerSelectionContainer.GetChild(i).gameObject);
             }
+            playButton.gameObject.SetActive(false);
             roomPlayerSelection.Clear();
         }
         private void HandleRemovePlayerInRoom(Player player)
@@ -82,6 +98,17 @@ namespace BrilathTTV
             {
                 UIPlayerSelection removeUIPlayerSelection = roomPlayerSelection[player];
                 Destroy(removeUIPlayerSelection);
+            }
+        }
+        private void HandleMasterClientSwitch(Player masterClient)
+        {
+            if (PhotonNetwork.LocalPlayer.Equals(masterClient))
+            {
+                playButton.gameObject.SetActive(true);
+            }
+            else
+            {
+                playButton.gameObject.SetActive(false);
             }
         }
     }
