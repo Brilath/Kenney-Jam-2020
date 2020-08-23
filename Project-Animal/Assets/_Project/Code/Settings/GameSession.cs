@@ -18,7 +18,7 @@ namespace BrilathTTV
             set
             {
                 playfabToken = value;
-                PlayerPrefs.SetString("PLAYFABTOKEN", value);
+                PlayerPrefs.SetString("PLAYFABTOKEN", playfabToken);
             }
         }
         [SerializeField]
@@ -33,7 +33,7 @@ namespace BrilathTTV
             set
             {
                 username = value;
-                PlayerPrefs.SetString("USERNAME", value);
+                PlayerPrefs.SetString("USERNAME", username);
             }
         }
         [SerializeField]
@@ -48,7 +48,7 @@ namespace BrilathTTV
             set
             {
                 desiredPhotonRoom = value;
-                PlayerPrefs.SetString("DESIREDPHOTONROOM", value);
+                PlayerPrefs.SetString("DESIREDPHOTONROOM", desiredPhotonRoom);
             }
         }
         [SerializeField]
@@ -63,7 +63,7 @@ namespace BrilathTTV
             set
             {
                 selectedCharacter = value;
-                PlayerPrefs.SetInt("DESIREDPHOTONROOM", value);
+                PlayerPrefs.SetInt("SELECTEDCHARACTER", selectedCharacter);
             }
         }
     }

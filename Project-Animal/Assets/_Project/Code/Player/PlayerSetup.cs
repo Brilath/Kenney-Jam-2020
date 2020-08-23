@@ -11,7 +11,6 @@ namespace BrilathTTV
         [SerializeField] PhotonView playerPhotonView;
         [SerializeField] SpriteRenderer spriteRenderer;
         [SerializeField] private Sprite[] sprites;
-        [SerializeField] GameSession gameSession;
 
         private void Awake()
         {
@@ -28,13 +27,19 @@ namespace BrilathTTV
             }
             else
             {
-                playerPhotonView.RPC("SetPlayerModel", RpcTarget.AllBuffered, gameSession.SelectedCharacter);
+
+                playerPhotonView.RPC("SetPlayerModel", RpcTarget.AllBuffered, GetCharacterSelection());
             }
         }
-        // Update is called once per frame
-        void Update()
+        private int GetCharacterSelection()
         {
-
+            int selection = 0;
+            object playerSelectionObj;
+            if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue(NetworkCustomSettings.CHARACTER_SELECTION_NUMBER, out playerSelectionObj))
+            {
+                selection = (int)playerSelectionObj;
+            }
+            return selection;
         }
         [PunRPC]
         private void SetPlayerModel(int modelId)

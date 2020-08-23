@@ -25,7 +25,10 @@ Features
 	* Join Friends (Done)
 	* Player Selection (Done)
 	* Start Game (Done)	
+
+To Do:
+	* Curse isn't jumping between players correctly
 	* Recently played with (Day 3)
 	* Join random game queue (Day 2 Evening)
 	* Join room (OnRoomListUpdate) (Day 2 Evening)
-	* Unlock Animal Skins (Dreaming)
+	* Unlock Animal Skins (Dreaming)	

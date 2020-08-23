@@ -43,6 +43,8 @@ MonoBehaviour:
   - RPCSetParentTransform
   - RPCSetSelectionButtons
   - SetPlayerModel
+  - RPCSetSpriteColor
+  - RPCSetStatus
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

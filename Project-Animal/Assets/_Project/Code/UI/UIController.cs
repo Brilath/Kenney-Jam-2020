@@ -10,7 +10,7 @@ namespace BrilathTTV
 {
     public class UIController : MonoBehaviour
     {
-        [SerializeField] private GameSession gameSession;
+        [SerializeField] private GameSessionController session;
         [Header("Friend UI")]
         [SerializeField] private UIFriend uiFriendPrefab;
         [SerializeField] private Transform friendContainer;
@@ -76,6 +76,7 @@ namespace BrilathTTV
                 rectTransform.sizeDelta += new Vector2(0, 100);
             }
         }
+
         private void HandleDisplayRoomPlayer(Player player)
         {
             Debug.Log($"Handling Diplay Room Player {PhotonNetwork.LocalPlayer.NickName}");
@@ -83,11 +84,11 @@ namespace BrilathTTV
             {
                 GameObject uiPlayerSelectionGO = PhotonNetwork.Instantiate(uiPlayerSelectionPrefab.name, Vector3.zero, Quaternion.identity);
                 UIPlayerSelection uiPlayerSelection = uiPlayerSelectionGO.GetComponent<UIPlayerSelection>();
-                // UIPlayerSelection uiPlayerSelection = Instantiate(uiPlayerSelectionPrefab, playerSelectionContainer);
                 uiPlayerSelection.Initialize(player, playerSelectionContainer.name);
                 roomPlayerSelection.Add(player, uiPlayerSelection);
             }
         }
+
         private void HandleRemovePlayersInRoom()
         {
             for (int i = 0; i < playerSelectionContainer.childCount; i++)
@@ -97,6 +98,7 @@ namespace BrilathTTV
             playButton.gameObject.SetActive(false);
             roomPlayerSelection.Clear();
         }
+
         private void HandleRemovePlayerInRoom(Player player)
         {
             if (roomPlayerSelection.ContainsKey(player))

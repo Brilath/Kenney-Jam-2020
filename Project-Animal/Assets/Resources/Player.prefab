@@ -218,9 +218,11 @@ MonoBehaviour:
   body: {fileID: 0}
   bodyCollider: {fileID: 0}
   spriteRenderer: {fileID: 0}
+  playerPhotonview: {fileID: 0}
   maxSpeed: 5
   currentMoveSpeed: 0
   accelerationSpeed: 30
+  airAccelerationSpeed: 15
   jumpPower: {x: 0, y: 8}
   velocity: {x: 0, y: 0}
   desiredVelocity: {x: 0, y: 0}
@@ -232,7 +234,6 @@ MonoBehaviour:
   cursedColor: {r: 0.12941177, g: 0.85882354, b: 0.15686275, a: 1}
   curseImmuneTime: 5
   curseImmuneTimeCountDown: 0
-  playerPhotonview: {fileID: 0}
   CanBeCursed: 0
   IsCursed: 0
 --- !u!61 &3421967436633566530
@@ -334,7 +335,6 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 8d74258ea9c2b6346a79ee0e563419b8, type: 3}
   - {fileID: 21300000, guid: fb7705b9b3c1cc741b0b4e2324cabb4d, type: 3}
   - {fileID: 21300000, guid: 6dc05ab3965447545aafb5356d195b4e, type: 3}
-  gameSession: {fileID: 11400000, guid: 93d7cfe161991de44bc4b00d3a478b48, type: 2}
 --- !u!114 &3421967436633566559
 MonoBehaviour:
   m_ObjectHideFlags: 0

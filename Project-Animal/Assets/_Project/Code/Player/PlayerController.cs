@@ -6,23 +6,28 @@ using Photon.Pun;
 
 public class PlayerController : MonoBehaviour
 {
+    [Header("Components")]
     [SerializeField] private Animator animator;
     [SerializeField] private Rigidbody2D body;
     [SerializeField] private BoxCollider2D bodyCollider;
     [SerializeField] private SpriteRenderer spriteRenderer;
+    [SerializeField] private PhotonView playerPhotonview;
+    [Header("Movement")]
     [SerializeField] private float maxSpeed;
     [SerializeField] private float currentMoveSpeed;
     [SerializeField] private float accelerationSpeed;
+    [SerializeField] private float airAccelerationSpeed;
     [SerializeField] private Vector2 jumpPower;
     [SerializeField] private Vector2 velocity;
     [SerializeField] private Vector2 desiredVelocity;
     [SerializeField] private bool desiredJump;
     [SerializeField] private LayerMask groundMask;
+    [Header("Curse")]
     [SerializeField] private Color normalColor;
     [SerializeField] private Color cursedColor;
     [SerializeField] private float curseImmuneTime;
     [SerializeField] private float curseImmuneTimeCountDown;
-    [SerializeField] private PhotonView playerPhotonview;
+
     public bool CanBeCursed;
     public bool IsCursed;
 
@@ -34,12 +39,17 @@ public class PlayerController : MonoBehaviour
         playerPhotonview = GetComponent<PhotonView>();
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         currentMoveSpeed = maxSpeed;
-        IsCursed = false;
+    }
+    private void Start()
+    {
+        bool isCursed = false;
+        bool canBeCursed = true;
+        playerPhotonview.RPC("RPCSetStatus", RpcTarget.AllBuffered, isCursed, canBeCursed);
     }
 
     private void Update()
     {
-        animator.SetFloat("speed", body.velocity.x);
+        animator.SetFloat("speed", Math.Abs(body.velocity.x));
         desiredVelocity.x = Input.GetAxis("Horizontal") * currentMoveSpeed;
         desiredJump |= Input.GetButtonDown("Jump");
 
@@ -49,13 +59,16 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
+            Debug.Log($"Not immune to curse {PhotonNetwork.LocalPlayer.UserId}");
             CanBeCursed = true;
+            playerPhotonview.RPC("RPCSetStatus", RpcTarget.AllBuffered, IsCursed, CanBeCursed);
         }
     }
 
     private void FixedUpdate()
     {
-        float changeSpeed = accelerationSpeed * Time.deltaTime;
+        float acceleration = OnGround() ? accelerationSpeed : airAccelerationSpeed;
+        float changeSpeed = acceleration * Time.deltaTime;
         velocity.x = Mathf.MoveTowards(velocity.x, desiredVelocity.x, changeSpeed);
         velocity.y = Mathf.MoveTowards(velocity.y, jumpPower.y, changeSpeed);
 
@@ -98,32 +111,50 @@ public class PlayerController : MonoBehaviour
         if (other.gameObject.tag == "Player")
         {
             PlayerController controller = other.gameObject.GetComponent<PlayerController>();
+            // If other player is cursed and you are not
             if (controller.IsCursed && CanBeCursed)
             {
                 controller.UnCursePlayer();
                 CursePlayer();
             }
-            else if (!controller.IsCursed && controller.CanBeCursed)
+            // If other player is not cursed and can be cursed
+            else if (!controller.IsCursed && controller.CanBeCursed && IsCursed)
             {
                 controller.CursePlayer();
                 UnCursePlayer();
             }
         }
     }
-
     public void CursePlayer()
     {
-        IsCursed = true;
-        CanBeCursed = true;
-        spriteRenderer.color = cursedColor;
+        bool isCursed = true;
+        bool canBeCursed = false;
+        IsCursed = isCursed;
+        CanBeCursed = canBeCursed;
+        playerPhotonview.RPC("RPCSetStatus", RpcTarget.AllBuffered, isCursed, canBeCursed);
+        playerPhotonview.RPC("RPCSetSpriteColor", RpcTarget.AllBuffered, cursedColor.r, cursedColor.g, cursedColor.b);
         StartCoroutine(SlowCursedPlayer());
     }
     public void UnCursePlayer()
     {
-        IsCursed = false;
-        CanBeCursed = false;
-        spriteRenderer.color = normalColor;
+        bool isCursed = false;
+        bool canBeCursed = true;
+        IsCursed = isCursed;
+        CanBeCursed = canBeCursed;
+        playerPhotonview.RPC("RPCSetStatus", RpcTarget.AllBuffered, isCursed, canBeCursed);
+        playerPhotonview.RPC("RPCSetSpriteColor", RpcTarget.AllBuffered, normalColor.r, normalColor.g, normalColor.b);
         curseImmuneTimeCountDown = curseImmuneTime;
+    }
+    [PunRPC]
+    private void RPCSetStatus(bool isCursed, bool canBeCursed)
+    {
+        IsCursed = isCursed;
+        CanBeCursed = canBeCursed;
+    }
+    [PunRPC]
+    private void RPCSetSpriteColor(float r, float g, float b)
+    {
+        spriteRenderer.color = new Color(r, g, b);
     }
     private IEnumerator SlowCursedPlayer()
     {

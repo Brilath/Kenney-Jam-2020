@@ -9,7 +9,6 @@ public class GameController : MonoBehaviour
     [SerializeField] private Transform spawnPoints;
     [SerializeField] private GameObject playerPrefab;
 
-    // Start is called before the first frame update
     void Start()
     {
         int point = PhotonNetwork.LocalPlayer.ActorNumber;
