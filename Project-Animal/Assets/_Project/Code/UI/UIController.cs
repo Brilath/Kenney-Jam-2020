@@ -51,6 +51,11 @@ namespace BrilathTTV
             recentPlayersPanel.SetActive(!recentPlayersPanel.activeSelf);
         }
 
+        public void QuitGame()
+        {
+            Application.Quit();
+        }
+
         public void StartGame()
         {
             OnLoadNetworkScene?.Invoke(gameSceneName);

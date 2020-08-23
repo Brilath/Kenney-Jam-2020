@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 3421967435489318998}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_Children: []
   m_Father: {fileID: 3421967436633566552}
   m_RootOrder: 0
@@ -70,16 +70,16 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 0}
+  m_SortingOrder: 2
+  m_Sprite: {fileID: 21300000, guid: d4da8f7b55387fd4988d887648b5d05a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 4.24, y: 3.42}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!114 &3421967435489318996
@@ -118,12 +118,13 @@ GameObject:
   - component: {fileID: 3421967436633566558}
   - component: {fileID: 3421967436633566529}
   - component: {fileID: 3421967436633566530}
+  - component: {fileID: 2079849026604935946}
   - component: {fileID: 3421967436633566531}
   - component: {fileID: 5528604431980689919}
   - component: {fileID: 3421967436633566559}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 6519382022992737161, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -215,12 +216,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 0}
   body: {fileID: 0}
-  moveSpeed: 5
+  bodyCollider: {fileID: 0}
+  spriteRenderer: {fileID: 0}
+  maxSpeed: 5
+  currentMoveSpeed: 0
   accelerationSpeed: 30
   jumpPower: {x: 0, y: 8}
   velocity: {x: 0, y: 0}
   desiredVelocity: {x: 0, y: 0}
   desiredJump: 0
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 256
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  cursedColor: {r: 0.12941177, g: 0.85882354, b: 0.15686275, a: 1}
+  curseImmuneTime: 5
+  curseImmuneTimeCountDown: 0
+  playerPhotonview: {fileID: 0}
+  CanBeCursed: 0
+  IsCursed: 0
 --- !u!61 &3421967436633566530
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -234,7 +248,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -0.0030366182, y: -0.030357838}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -245,7 +259,33 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1.2854173, y: 1.3521461}
+  m_EdgeRadius: 0
+--- !u!61 &2079849026604935946
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3421967436633566553}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.0030366182, y: -0.030357838}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1.3, y: 1.4}
   m_EdgeRadius: 0
 --- !u!50 &3421967436633566531
 Rigidbody2D:
@@ -259,7 +299,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 1
-  m_Mass: 1
+  m_Mass: 1.738072
   m_LinearDrag: 0
   m_AngularDrag: 0
   m_GravityScale: 1
@@ -280,6 +320,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c43c759c7a9fad54e98ce52990d16c11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  controller: {fileID: 0}
+  playerPhotonView: {fileID: 0}
+  spriteRenderer: {fileID: 0}
+  sprites:
+  - {fileID: 21300000, guid: a0503da6d76048d41aef363589056bd9, type: 3}
+  - {fileID: 21300000, guid: 6e0744eb3bb692d4e8d16d75e01349c6, type: 3}
+  - {fileID: 21300000, guid: 43b4873e137f1584584665b348d01a19, type: 3}
+  - {fileID: 21300000, guid: 37fc3ac60a3b2b840b17e64bf32f6146, type: 3}
+  - {fileID: 21300000, guid: 0eb53202f9f2efb40a7fc0277b0d40d3, type: 3}
+  - {fileID: 21300000, guid: 548cf6ba36d97f348a7b5c4c07ff32d6, type: 3}
+  - {fileID: 21300000, guid: 2c68b2cecf97de24884dbd20615fb9d6, type: 3}
+  - {fileID: 21300000, guid: 8d74258ea9c2b6346a79ee0e563419b8, type: 3}
+  - {fileID: 21300000, guid: fb7705b9b3c1cc741b0b4e2324cabb4d, type: 3}
+  - {fileID: 21300000, guid: 6dc05ab3965447545aafb5356d195b4e, type: 3}
+  gameSession: {fileID: 11400000, guid: 93d7cfe161991de44bc4b00d3a478b48, type: 2}
 --- !u!114 &3421967436633566559
 MonoBehaviour:
   m_ObjectHideFlags: 0
