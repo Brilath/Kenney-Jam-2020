@@ -32,3 +32,4 @@ To Do:
 	* Join random game queue (Day 2 Evening)
 	* Join room (OnRoomListUpdate) (Day 2 Evening)
 	* Unlock Animal Skins (Dreaming)	
+	* Scriptable Object to store skins

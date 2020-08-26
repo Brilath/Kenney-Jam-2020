@@ -35,7 +35,6 @@ public class PlayerController : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         body = GetComponent<Rigidbody2D>();
-        bodyCollider = GetComponent<BoxCollider2D>();
         playerPhotonview = GetComponent<PhotonView>();
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         currentMoveSpeed = maxSpeed;
