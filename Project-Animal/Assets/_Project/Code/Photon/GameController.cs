@@ -4,22 +4,41 @@ using Photon.Realtime;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 
-public class GameController : MonoBehaviour
+namespace BrilathTTV
 {
-    [SerializeField] private Transform spawnPoints;
-    [SerializeField] private GameObject playerPrefab;
 
-    void Start()
+
+    public class GameController : MonoBehaviour
     {
-        int point = PhotonNetwork.LocalPlayer.ActorNumber;
-        point = Mathf.Clamp(point, 0, PhotonNetwork.CurrentRoom.PlayerCount);
+        [SerializeField] private Transform spawnPoints;
+        [SerializeField] private GameObject playerPrefab;
+        [SerializeField] private GameObject gameMenu;
 
-        Vector3 spawnPosition = spawnPoints.GetChild(point).position;
-        PhotonNetwork.Instantiate(playerPrefab.name, spawnPosition, Quaternion.identity);
-    }
+        void Start()
+        {
+            int point = PhotonNetwork.LocalPlayer.ActorNumber;
+            point = Mathf.Clamp(point, 0, PhotonNetwork.CurrentRoom.PlayerCount);
 
-    public void ExitGame()
-    {
-        SceneManager.LoadScene("MainMenu");
+            Vector3 spawnPosition = spawnPoints.GetChild(point).position;
+            PhotonNetwork.Instantiate(playerPrefab.name, spawnPosition, Quaternion.identity);
+        }
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                ToggleGameMenu(!gameMenu.activeSelf);
+            }
+        }
+
+        public void ToggleGameMenu(bool isActive)
+        {
+            gameMenu.SetActive(isActive);
+        }
+        public void ExitGame()
+        {
+            SceneManager.LoadScene("MainMenu");
+        }
+
     }
 }

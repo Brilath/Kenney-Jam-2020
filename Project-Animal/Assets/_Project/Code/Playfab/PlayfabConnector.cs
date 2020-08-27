@@ -22,6 +22,7 @@ namespace BrilathTTV
         {
             PlayerPrefs.DeleteKey("PLAYFABTOKEN");
             PlayerPrefs.DeleteKey("DESIREDPHOTONROOM");
+            PlayerPrefs.DeleteKey("USERNAME");
 
             if (string.IsNullOrEmpty(PlayFabSettings.TitleId))
             {
